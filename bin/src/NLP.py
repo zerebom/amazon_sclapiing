@@ -38,15 +38,14 @@ def make_lines(txt,Flg_matubi=False):
             'pos': res_cols[0]}
             morphemes.append(morpheme)
 
-def clean_txt(fname):
-    with open(fname,errors='ignore') as data_file:
-        text_data=data_file.read()
-        text_data=re.sub('\（.+\）','',text_data)
-        text_data=re.sub('.+　','',text_data)
-        text_data=re.sub('\n','',text_data)
-        text_data=re.sub('\\u3000','',text_data)
-        text_data=text_data.split('。')
-        return(text_data)
+
+def clean_txt(text_data):
+    # text_data=re.sub('\（.+\）','',text_data)
+    text_data=re.sub('.+　','',text_data)
+    text_data=re.sub('\n','',text_data)
+    text_data=re.sub('\\u3000','',text_data)
+    text_data=text_data.split('。')
+    return(text_data)
 
 def count_morpheme(txt,word_class='動詞',stop_IO=False):
     word_counter = Counter()
@@ -78,8 +77,27 @@ def count_matubi(txt,matubi=4):
         word_counter.update([tmp])                
     return(word_counter)
 
-def count_to_pd(df,df_name,counter,to_csv=False):
-    count_word ,count_cnt=zip(*counter.most_common(200))
+def count_to_pd(df,df_name,counter):
+    count_word ,count_cnt=zip(*counter.most_common())
     s=pd.Series(count_cnt,index=count_word,name=df_name)
     df=pd.concat([df,s],axis=1)
     return(df)
+
+
+def count_morphemes(txt,goiword,word_class=['動詞','名詞','形容詞'],goihyo_flg=False):
+
+    word_counter = Counter()
+    # stopword=make_stopword()
+
+    for morphemes in make_lines(txt,Flg_matubi=False):
+        for morpheme in morphemes:
+            if goihyo_flg==True:
+                if len(morpheme['base'])==1 or not morpheme['base'] in goiword:
+                    continue
+            else:
+                if len(morpheme['base'])==1:
+                    continue
+
+            if morpheme['pos'] in word_class:
+                word_counter.update([morpheme['base']])
+    return(word_counter)
