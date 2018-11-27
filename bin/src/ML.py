@@ -16,35 +16,30 @@ from sklearn.metrics import confusion_matrix
 from sklearn.metrics import classification_report
 from sklearn.metrics import f1_score
 
-def preproDF(df0,df1,PERCENT):
+# def preproDF(df,PERCENT):
+#     df['kouseihi']=df['sum']/df['sum'].sum()
+#     df['ruisekihi']=df['sum'].cumsum()/df['sum'].sum()
+#     df=df.reset_index(drop=True)
+#     df=df[df['kouseihi']>PERCENT]
+    
+#     df=df.T
+#     wordcouttdf=df[['Unnamed: 0','sum_word','kouseihi','ruisekihi']]
+#     df.drop(columns=['Unnamed: 0','sum_word','kouseihi','ruisekihi'],inplace=True)
+#     return(df,wordcouttdf)
+
+
+def preproDF(df,PERCENT):
     df['kouseihi']=df['sum']/df['sum'].sum()
     df['ruisekihi']=df['sum'].cumsum()/df['sum'].sum()
     df=df.reset_index(drop=True)
     df=df[df['kouseihi']>PERCENT]
-    
-    df=df.T
-    wordcouttdf=wordcouttdf.T
-
-
-
-
-
-
-def preproDF2(df,PERCENT):
-    # df=df.sort_values('sum',ascending=False)
-    df['kouseihi']=df['sum']/df['sum'].sum()
-    df['ruisekihi']=df['sum'].cumsum()/df['sum'].sum()
-
-    df=df.reset_index(drop=True)
-    df=df[df['kouseihi']>PERCENT]
-    
+    print(df.columns)
+    df=df.fillna(0)
     wordcouttdf=df[['Unnamed: 0','sum','kouseihi','ruisekihi']]
     df.drop(columns=['Unnamed: 0','sum','kouseihi','ruisekihi'],inplace=True)
-
     df=df.T
     wordcouttdf=wordcouttdf.T
+    
+    return(df,wordcouttdf)
 
-    df['label']=1
-    target=df['label']
-    df=df.drop(columns=['label'])
-    return(df,target,wordcouttdf)
+

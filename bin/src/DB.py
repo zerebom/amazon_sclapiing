@@ -127,7 +127,7 @@ def helper_get_producu_url(browser):
     '''
     # browser.get(url)
     # time.sleep(0.3) 
-    soup = BeautifulSoup(browser.page_source, 'html.parser')
+    soup = BeautifulSoup(browser.page_source, 'lxml')
     try:
         review_number=soup.select('.dashboard-desktop-stat-value')[1].text
     except:
@@ -135,6 +135,7 @@ def helper_get_producu_url(browser):
     
     
     review_box=soup.select('.profile-at-card')
+    #リスト内包表記の中で例外処理を行うための関数
     def igonre_none_product(x):
         try:
             return x.select('.profile-at-product-title-container > span')[0].text
@@ -147,7 +148,7 @@ def helper_get_producu_url(browser):
     return(browser,review_number,review_url,products_name)
 
 
-def scroll_and_get_100_Products_url(url,max_num=300):
+def scroll_and_get_100_Products_url(url,max_num=500):
     '''
     レビュアー詳細URLからその人の全レビューURLを取得するコード
     その人の獲得した星の数や、レビュー数もその気になれば手に入れられる
@@ -155,7 +156,6 @@ def scroll_and_get_100_Products_url(url,max_num=300):
     '''
     browser = webdriver.Chrome(chrome_options=options)
     browser.get(url)
-    time.sleep(0.1)
     browser,review_number,review_url,products_name=helper_get_producu_url(browser)[0:4]
     print(f'総レビュー数:{review_number}件')
     i=0
