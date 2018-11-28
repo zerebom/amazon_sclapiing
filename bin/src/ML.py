@@ -33,7 +33,7 @@ def preproDF(df,PERCENT):
     df['ruisekihi']=df['sum'].cumsum()/df['sum'].sum()
     df=df.reset_index(drop=True)
     df=df[df['kouseihi']>PERCENT]
-    print(df.columns)
+    # print(df.columns)
     df=df.fillna(0)
     wordcouttdf=df[['Unnamed: 0','sum','kouseihi','ruisekihi']]
     df.drop(columns=['Unnamed: 0','sum','kouseihi','ruisekihi'],inplace=True)
